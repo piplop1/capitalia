@@ -86,19 +86,19 @@ src/main/java/com/capitalia/
 
 ## Instalación
 
-1. Cloná el repositorio:
+1. Clona el repositorio:
 ```bash
 git clone https://github.com/piplop1/capitalia.git
 ```
 
-2. Creá la base de datos en MySQL:
+2. Crea la base de datos en MySQL:
 ```sql
 CREATE DATABASE capitalia;
 ```
 
-3. Importá el esquema de tablas desde tu backup local.
+3. Importa el esquema de tablas desde tu backup local.
 
-4. Creá el archivo `src/main/resources/application-dev.properties` con tus credenciales:
+4. Crea el archivo `src/main/resources/application-dev.properties` con tus credenciales:
 ```properties
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
@@ -108,12 +108,12 @@ spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
 ```
 
-5. Ejecutá el proyecto desde IntelliJ o con:
+5. Ejecuta el proyecto desde IntelliJ o con:
 ```bash
 ./mvnw spring-boot:run
 ```
 
-6. Abrí el navegador en `http://localhost:8080`
+6. Abre el navegador en `http://localhost:8080`
 
 ## Roles del sistema
 
