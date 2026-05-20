@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes - Capitalia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/index.css}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        [data-monto] { visibility: hidden; }
+    </style>
+</head>
+<body>
+    <main>
+        <nav class="main-nav" th:replace="layouts/fragmentos:: navbarAdministrador"></nav>
+        
+        <section class="content-section">
+            
+            <div class="intro-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1><i class="fas fa-chart-line"></i> Reportes del Sistema</h1>
+                    <p class="subtitle">Análisis de datos financieros y operativos.</p>
+                </div>
+                <button onclick="window.print()" class="btn-secondary">
+                    <i class="fas fa-file-pdf"></i> Descargar PDF
+                </button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <div class="card" style="text-align: center; border-top: 4px solid #00FFFF;">
+                    <h3 style="margin: 0; color: #aaa; font-size: 1rem;">Total Usuarios</h3>
+                    <p style="font-size: 2.5rem; font-weight: bold; margin: 10px 0; color: white;" th:text="${totalUsuarios}">0</p>
+                    <i class="fas fa-users" style="color: #00FFFF; font-size: 1.5rem;"></i>
+                </div>
+                <div class="card" style="text-align: center; border-top: 4px solid #ff9f43;">
+                    <h3 style="margin: 0; color: #aaa; font-size: 1rem;">Capital en Bóveda</h3>
+                    <p data-monto style="font-size: 2.5rem; font-weight: bold; margin: 10px 0; color: white;" th:text="'S/ ' + ${totalDinero}">S/ 0.00</p>
+                    <i class="fas fa-wallet" style="color: #ff9f43; font-size: 1.5rem;"></i>
+                </div>
+                <div class="card" style="text-align: center; border-top: 4px solid #ff4d4d;">
+                    <h3 style="margin: 0; color: #aaa; font-size: 1rem;">Préstamos Activos</h3>
+                    <p style="font-size: 2.5rem; font-weight: bold; margin: 10px 0; color: white;" th:text="${prestamosActivos}">0</p>
+                    <i class="fas fa-file-contract" style="color: #ff4d4d; font-size: 1.5rem;"></i>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                
+                <div class="card">
+                    <h3 style="color: #ff9f43; margin-bottom: 20px;">Estado de Solicitudes</h3>
+                    <div style="height: 300px; display: flex; justify-content: center;">
+                        <canvas id="chartSolicitudes"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #00FFFF; margin-bottom: 20px;">Movimiento Financiero</h3>
+                    <div style="height: 300px;">
+                        <canvas id="chartFinanzas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+    <footer th:replace="layouts/fragmentos :: footer"></footer>
+
+    <script>
+        // 1. Obtener datos reales del Backend
+        fetch('/api/admin/stats')
+            .then(response => response.json())
+            .then(data => {
+                
+                // --- GRÁFICO 1: SOLICITUDES (DONA) ---
+                const ctxSol = document.getElementById('chartSolicitudes').getContext('2d');
+                new Chart(ctxSol, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Aprobadas', 'Rechazadas', 'Pendientes'],
+                        datasets: [{
+                            data: [
+                                data.solicitudes.Aprobadas, 
+                                data.solicitudes.Rechazadas, 
+                                data.solicitudes.Pendientes
+                            ],
+                            backgroundColor: ['#00ff88', '#ff4d4d', '#ffd700'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: 'white' } }
+                        }
+                    }
+                });
+            });
+
+        // --- GRÁFICO 2: FINANZAS (BARRAS - DATOS DE EJEMPLO PARA DEMO) ---
+        // (Para hacerlo real, necesitarías una consulta SQL por fechas)
+        const ctxFin = document.getElementById('chartFinanzas').getContext('2d');
+        new Chart(ctxFin, {
+            type: 'bar',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Depósitos',
+                    data: [1200, 1900, 3000, 5000, 2000, 3000],
+                    backgroundColor: '#00FFFF'
+                }, {
+                    label: 'Préstamos',
+                    data: [500, 1000, 200, 500, 4000, 100],
+                    backgroundColor: '#ff9f43'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { ticks: { color: 'white' }, grid: { color: '#444' } },
+                    x: { ticks: { color: 'white' }, grid: { display: false } }
+                },
+                plugins: {
+                    legend: { labels: { color: 'white' } }
+                }
+            }
+        });
+    </script>
+    
+    <style>
+        @media print {
+            .main-nav, button { display: none !important; }
+            body, .card { background: white !important; color: black !important; }
+            h1, h3, p, i { color: black !important; }
+            canvas { max-height: 400px; }
+        }
+    </style>
+    <script th:replace="layouts/fragmentos :: formatearMontos"></script>
+</body>
+</html>

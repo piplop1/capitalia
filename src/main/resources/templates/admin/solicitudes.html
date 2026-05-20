@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitudes de Préstamo - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <nav class="main-nav" th:replace="layouts/fragmentos:: navbarAdministrador"></nav>
+        
+        <section class="content-section">
+            
+            <div class="intro-header">
+                <h1><i class="fas fa-file-invoice-dollar"></i> Solicitudes Pendientes</h1>
+               
+            </div>
+
+            <div class="config-container"> 
+                <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+                <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+                <div class="card">
+                    <p class="subtitle">Gestiona las solicitudes de crédito de los clientes.</p>
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Monto</th>
+                                    <th>Plazo</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="sol : ${solicitudes}">
+                                    <td th:text="${sol.usuario.fullname}"></td>
+                                    <td data-monto th:text="'S/ ' + ${sol.montoSolicitado}" style="font-weight: bold; color: #00d4ff;"></td>
+                                    <td th:text="${sol.plazoMeses} + ' meses'"></td>
+                                    <td th:text="${#temporals.format(sol.fechaSolicitud, 'dd/MM/yyyy')}"></td>
+                                    <td class="actions">
+                                        
+                                        <form th:action="@{/solicitudes/procesar}" method="post" style="display:inline;">
+                                            <input type="hidden" name="id" th:value="${sol.idSolicitud}">
+                                            <input type="hidden" name="accion" value="APROBAR">
+                                            <button type="submit" class="btn-icon" style="color: #00ff88;" title="Aprobar y Desembolsar">
+                                                <i class="fas fa-check-circle"></i>
+                                            </button>
+                                        </form>
+
+                                        <form th:action="@{/solicitudes/procesar}" method="post" style="display:inline;">
+                                            <input type="hidden" name="id" th:value="${sol.idSolicitud}">
+                                            <input type="hidden" name="accion" value="RECHAZAR">
+                                            <button type="submit" class="btn-icon" style="color: #ff4d4d;" title="Rechazar">
+                                                <i class="fas fa-times-circle"></i>
+                                            </button>
+                                        </form>
+
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(solicitudes)}">
+                                    <td colspan="5" style="text-align: center;">No hay solicitudes pendientes.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="layouts/fragmentos :: footer"></footer>
+    <script th:replace="layouts/fragmentos :: formatearMontos"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Usuario - Capitalia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body>
+    <main>
+        <nav id="nav-links" class="main-nav" th:replace="layouts/fragmentos:: navbarUsuarios"></nav>
+        
+        <section id="inicio" class="content-section">
+            <div class="intro-header">
+                <h1 th:text="'Bienvenido de nuevo, ' + (${session.usuarioLogueado != null ? session.usuarioLogueado.fullname : 'Usuario'})"></h1>
+                <p class="subtitle"><i class="fas fa-hand-sparkles"></i> Este es tu panel de control personal.</p>
+            </div>
+
+            <div class="dashboard-resumen" style="display: flex; justify-content: center; margin-top: 30px;">
+                
+                <div class="card-saldo" style="background-color: #1a1a2e; padding: 30px; border-radius: 15px; border: 2px solid #00d4ff; box-shadow: 0 0 15px rgba(0, 212, 255, 0.3); text-align: center; min-width: 350px;">
+                    
+                    <h3 style="color: #a0a0a0; font-family: sans-serif; margin-bottom: 10px;">
+                        <i class="fas fa-wallet" style="color: #00d4ff;"></i> Saldo Disponible
+                    </h3>
+
+                    <h1 style="color: #ffffff; font-size: 3rem; margin: 10px 0;">
+                        <span data-monto th:text="${saldo}">0.00</span>
+                    </h1>
+
+                    <div style="background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 20px; display: inline-block; margin-top: 10px;">
+                        <p style="color: #fff; margin: 0; font-size: 0.9rem;">
+                            <i class="fas fa-credit-card"></i> Nro: <span th:text="${numeroCuenta}">----</span>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+            </section>
+    </main>
+    <footer th:replace="layouts/fragmentos :: footer"></footer>
+    <script th:replace="layouts/fragmentos :: formatearMontos"></script>
+</body>
+</html>

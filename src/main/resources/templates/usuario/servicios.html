@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios - Capitalia</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/index.css}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <nav id="nav-links" class="main-nav" th:replace="layouts/fragmentos:: navbarUsuarios"></nav>
+
+        <section class="content-section">
+            
+            <div class="intro-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <h1><i class="fas fa-exchange-alt"></i> Mis Servicios</h1>
+                    <p class="subtitle">Gestiona tus movimientos, deudas y solicitudes.</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-primary" data-modal-target="#modal-operacion"><i class="fas fa-coins"></i> Operación</button>
+                    <button class="btn-secondary" data-modal-target="#modal-prestamo" style="background-color: #ff9f43; color: white; border: none; font-weight: bold;"><i class="fas fa-file-invoice-dollar"></i> Pedir Préstamo</button>
+                </div>
+            </div>
+
+            <div th:if="${successMessage}" class="alert alert-success"><i class="fas fa-check-circle"></i> <span th:text="${successMessage}"></span></div>
+            <div th:if="${errorMessage}" class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <span th:text="${errorMessage}"></span></div>
+
+            <div class="card" style="margin-top: 20px;">
+                <h3 style="margin-bottom: 15px; color: #a0a0a0;">Historial Reciente</h3>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead><tr><th>Fecha</th><th>Tipo</th><th>Descripción</th><th>Monto</th></tr></thead>
+                        <tbody>
+                            <tr th:each="mov : ${movimientos}">
+                                <td th:text="${#temporals.format(mov.fechaTransaccion, 'dd/MM/yyyy HH:mm')}"></td>
+                                <td th:text="${mov.tipoMovimiento}"></td>
+                                <td th:text="${mov.descripcion}"></td>
+                                <td data-monto th:style="${mov.tipoMovimiento == 'DEPOSITO' || mov.tipoMovimiento == 'DESEMBOLSO' ? 'color: #00ff88;' : 'color: #ff4d4d;'}" th:text="'S/ ' + ${mov.monto}"></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(movimientos)}"><td colspan="4" style="text-align: center; padding: 20px; color: #888;">Sin movimientos.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 30px; border-top: 4px solid #ff4d4d;">
+                <h3 style="margin-bottom: 15px; color: #ff4d4d;"><i class="fas fa-hand-holding-usd"></i> Mis Préstamos</h3>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th><th>Monto Original</th><th>Interés</th><th>Total Deuda</th><th>Estado</th><th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="prestamo : ${misPrestamos}">
+                                <td th:text="${#temporals.format(prestamo.fechaDesembolso, 'dd/MM/yyyy')}"></td>
+                                <td data-monto th:text="'S/ ' + ${prestamo.montoAprobado}"></td>
+                                <td th:text="${prestamo.tasaInteresAplicada * 100} + '%'"></td>
+                                <td data-monto style="font-weight: bold; color: #ff4d4d;"
+                                    th:text="'S/' + ${totalesDeuda[prestamo.idPrestamo]}"></td>
+                                <td>
+                                    <span th:if="${prestamo.estadoPrestamo == 'ACTIVO'}" style="color: #ff4d4d;">Pendiente</span>
+                                    <span th:if="${prestamo.estadoPrestamo == 'PAGADO'}" style="color: #00ff88;">Pagado</span>
+                                </td>
+                                <td>
+                                    <form th:if="${prestamo.estadoPrestamo == 'ACTIVO'}"
+                                          th:action="@{/prestamos/pagar}" method="post"
+                                          onsubmit="return confirm('¿Liquidar deuda total de este préstamo?');"
+                                          style="margin: 0;">
+                                        <input type="hidden" name="idPrestamo" th:value="${prestamo.idPrestamo}">
+                                        <button type="submit" class="btn-primary"
+                                                style="padding: 4px 10px; font-size: 0.75rem; background: #ff4d4d; border: none;">
+                                            Liquidar
+                                        </button>
+                                    </form>
+                                    <span th:if="${prestamo.estadoPrestamo == 'PAGADO'}" style="color: #00ff88;">
+                                        <i class="fas fa-check-circle"></i> Pagado
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(misPrestamos)}"><td colspan="5" style="text-align: center; padding: 20px; color: #888;">No tienes deudas activas.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 30px; border-top: 4px solid #ff9f43;">
+                <h3 style="margin-bottom: 15px; color: #ff9f43;"><i class="fas fa-calendar-alt"></i> Mi Cronograma de Pagos</h3>
+                <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 15px;">Detalle de todas las cuotas pendientes y pagadas de tus préstamos.</p>
+                
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead style="background-color: #2d3436;">
+                            <tr>
+                                <th>Préstamo ID</th>
+                                <th>Cuota #</th>
+                                <th>Vencimiento</th>
+                                <th>Monto Cuota</th>
+                                <th>Estado</th>
+                                <th>Acción</th> </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="cuota : ${cronogramaTotal}">
+                                <td th:text="'#' + ${cuota.prestamo.idPrestamo}" style="color: #aaa;"></td>
+                                <td th:text="${cuota.numeroCuota}" style="text-align: center;"></td>
+                                <td th:text="${cuota.fechaVencimiento}"></td>
+                                <td data-monto th:text="'S/ ' + ${cuota.montoTotalCuota}" style="font-weight: bold;"></td>
+                                <td>
+                                    <span th:if="${cuota.estadoCuota == 'PENDIENTE'}" style="color: #ffd700;">Pendiente</span>
+                                    <span th:if="${cuota.estadoCuota == 'PAGADO'}" style="color: #00ff88;">Pagado</span>
+                                </td>
+                                <td>
+                                    <form th:if="${cuota.estadoCuota == 'PENDIENTE'}"
+                                          th:action="@{/cuotas/pagar}" method="post" style="margin: 0;">
+                                        <input type="hidden" name="idCronograma" th:value="${cuota.idCronograma}">
+                                        <button type="submit" class="btn-primary"
+                                                style="padding: 4px 10px; font-size: 0.75rem; background: #00d4ff; border: none;">
+                                            Pagar cuota
+                                        </button>
+                                    </form>
+                                    <span th:if="${cuota.estadoCuota == 'PAGADO'}" style="color: #00ff88;">
+                                        <i class="fas fa-check-circle"></i> Pagada
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(cronogramaTotal)}">
+                                <td colspan="6" style="text-align: center; padding: 20px; color: #888;">No hay cuotas programadas.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 30px; border-top: 4px solid #ffd700;">
+                <h3 style="margin-bottom: 15px; color: #ffd700;"><i class="fas fa-history"></i> Historial de Solicitudes</h3>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead><tr><th>Fecha</th><th>Monto</th><th>Plazo</th><th>Estado</th></tr></thead>
+                        <tbody>
+                            <tr th:each="sol : ${misSolicitudes}">
+                                <td th:text="${#temporals.format(sol.fechaSolicitud, 'dd/MM/yyyy')}"></td>
+                                <td data-monto th:text="'S/ ' + ${sol.montoSolicitado}"></td>
+                                <td th:text="${sol.plazoMeses} + ' meses'"></td>
+                                <td><span th:text="${sol.estado}"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="modal-operacion">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h3>Realizar Operación</h3>
+            <form class="modal-form" th:action="@{/transacciones/nueva}" method="post">
+                <div class="form-group"><label>Tipo</label><select name="tipo" required style="width:100%; padding:10px; background:#333; color:white;"><option value="DEPOSITO">Depósito</option><option value="RETIRO">Retiro</option></select></div>
+                <div class="form-group"><label>Monto</label><input type="number" name="monto" required step="0.01" min="1.00"></div>
+                <div class="form-group"><label>Descripción</label><input type="text" name="descripcion" required></div>
+                <button class="btn-primary">Procesar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-prestamo">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h3>Solicitar Préstamo</h3>
+            <form class="modal-form" th:action="@{/prestamos/solicitar}" method="post">
+                 <div class="form-group"><label>Monto</label><input type="number" name="monto" required step="0.01" min="1.00"></div>
+                 <div class="form-group"><label>Plazo</label><select name="plazo" required style="width:100%; padding:10px; background:#333; color:white;"><option value="6">6 Meses</option><option value="12">12 Meses</option></select></div>
+                 <button class="btn-primary" style="background:#ff9f43; border-color:#ff9f43;">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <footer th:replace="layouts/fragmentos :: footer"></footer>
+    <script th:replace="layouts/fragmentos :: formatearMontos"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script>
+        document.querySelectorAll('[data-modal-target]').forEach(button => {
+            button.addEventListener('click', () => {
+                const modalSelector = button.getAttribute('data-modal-target');
+                const modal = document.querySelector(modalSelector);
+                if(modal) modal.style.display = 'flex';
+            });
+        });
+        document.querySelectorAll('.modal-close-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = button.closest('.modal-overlay');
+                if(modal) modal.style.display = 'none';
+            });
+        });
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

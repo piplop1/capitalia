@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - Admin Capitalia</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/index.css}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <nav class="main-nav" th:replace="layouts/fragmentos:: navbarAdministrador"></nav>
+        
+        <section class="content-section">
+            
+            <div class="intro-header">
+                <h1><i class="fas fa-cogs"></i> Maestros y Parámetros</h1>
+                <p class="subtitle">Gestiona las reglas financieras del sistema (Tasas, Niveles, etc.).</p>
+            </div>
+
+            <div class="config-container">
+                
+                <div th:if="${successMessage}" class="alert alert-success">
+                    <i class="fas fa-check-circle"></i> <span th:text="${successMessage}"></span>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i> <span th:text="${errorMessage}"></span>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #ff9f43; margin-bottom: 15px;">Parámetros del Sistema</h3>
+                    
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Clave / Parámetro</th>
+                                    <th>Valor Actual</th>
+                                    <th>Descripción</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="conf : ${configs}">
+                                    <td th:text="${conf.clave}" style="font-weight: bold; color: #00FFFF;"></td>
+                                    
+                                    <form th:action="@{/admin/configuracion/guardar}" method="post">
+                                        <td>
+                                            <input type="hidden" name="clave" th:value="${conf.clave}">
+                                            <input type="number" name="valor" th:value="${conf.valor}" step="0.0001" required 
+                                                   style="width: 120px; padding: 8px; background: #333; color: white; border: 1px solid #555; border-radius: 5px;">
+                                        </td>
+                                        
+                                        <td th:text="${conf.descripcion}" style="color: #aaa; font-size: 0.9rem;"></td>
+                                        
+                                        <td>
+                                            <button type="submit" class="btn-secondary" style="padding: 5px 15px; font-size: 0.85rem; border-color: #00ff88; color: #00ff88;">
+                                                <i class="fas fa-save"></i> Guardar
+                                            </button>
+                                        </td>
+                                    </form>
+                                </tr>
+                                
+                                <tr th:if="${#lists.isEmpty(configs)}">
+                                    <td colspan="4" style="text-align: center; padding: 20px; color: #ff4d4d;">
+                                        No hay configuraciones cargadas en la base de datos.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="info-box" style="margin-top: 20px;">
+                    <i class="fas fa-info-circle"></i> <strong>Nota:</strong> Los cambios en las tasas de interés afectarán solo a los nuevos préstamos generados a partir de ahora.
+                </div>
+
+            </div>
+        </section>
+    </main>
+    <footer th:replace="layouts/fragmentos :: footer"></footer>
+</body>
+</html>

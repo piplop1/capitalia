@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosotros - Capitalia</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+     <main class="main-nosotros">
+          <nav class="main-nav" th:replace="layouts/fragmentos:: navbarPrincipal "></nav>
+        <section id="nosotros" class="content-section">
+            <h2 class="hidden-on-load">Sobre Nosotros <i class="fas fa-chart-line"></i></h2>
+            <div class="about-us-grid">
+                <div class="about-us-card">
+                    <h3><i class="fas fa-rocket"></i> Nuestro Enfoque FinTech</h3>
+                    <p>Capitalia es una entidad que se posiciona en el rubro FinTech, dedicada a ofrecer soluciones digitales que impulsan el progreso económico. Nuestra identidad se construye sobre la solidez, la confianza y la accesibilidad.</p>
+                </div>
+                <div class="about-us-card">
+                    <h3><i class="fas fa-bullseye"></i> Misión y Visión</h3>
+                    <p>Nuestra misión es brindar plataformas tecnológicas innovadoras y seguras. Trabajamos con la visión de ser líderes en Latinoamérica en el desarrollo de sistemas web especializados, garantizando eficiencia y confianza a través de metodologías ágiles como Scrum.</p>
+                </div>
+                <div class="about-us-card">
+                    <h3><i class="fas fa-cogs"></i> Tecnología y Automatización</h3>
+                    <p>Estamos especializados en la implementación de sistemas de ahorros que automatizan procesos manuales, eliminando errores y facilitando la toma de decisiones estratégicas mediante el análisis de datos en tiempo real.</p>
+                </div>
+                <div class="about-us-card">
+                    <h3><i class="fas fa-layer-group"></i> Nuestra Base Tecnológica</h3>
+                    <p>Nuestro sistema se diseña bajo una Arquitectura N-Capas (Presentación, Negocio y Datos) con tecnologías como Java, SQL Server y más, garantizando un servicio seguro, escalable y eficiente para el futuro de las finanzas.</p>
+                </div>
+                <div class="about-us-card">
+                    <h3><i class="fas fa-bolt"></i> Compromiso con la Calidad</h3>
+                    <p>Desarrollamos bajo la metodología ágil Scrum, trabajando en ciclos cortos (Sprints) para entregar valor constante, probar nuevas funcionalidades y asegurar que Capitalia evoluciona rápidamente según las necesidades del cliente.</p>
+                </div>
+            </div>
+
+            <!-- Nueva sección del equipo -->
+            <div class="team-section">
+                <h3><i class="fas fa-users"></i> El Equipo Detrás de la Innovación</h3>
+                <p class="team-intro">Capitalia es el resultado del esfuerzo de un equipo multidisciplinario comprometido con la excelencia técnica y el desarrollo ágil.</p>
+                <div class="team-grid">
+                    <div class="team-member" data-role="Scrum Master & Analista de Datos">
+                        <div class="member-photo">JC</div>
+                        <div class="member-name">Jhanpool Correa</div>
+                    </div>
+                    <div class="team-member" data-role="Product Owner & Desarrollador Backend">
+                        <div class="member-photo">LC</div>
+                        <div class="member-name">Leonardo Cueva</div>
+                    </div>
+                    <div class="team-member" data-role="Arquitecto de Soluciones">
+                        <div class="member-photo">JP</div>
+                        <div class="member-name">José Periche</div>
+                    </div>
+                    <div class="team-member" data-role="Desarrollador Frontend & Tester">
+                        <div class="member-photo">LT</div>
+                        <div class="member-name">Luis Torres</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nueva sección de resultados con contadores -->
+            <div class="results-card">
+                <h3><i class="fas fa-flag-checkered"></i> Metas y Arquitectura</h3>
+                <div class="stats-container">
+                    <div class="stat"><div class="stat-number" data-target="4">0</div><span>Sprints Completados</span></div>
+                    <div class="stat"><div class="stat-number" data-target="10">0</div><span>+ Historias de Usuario</span></div>
+                    <div class="stat"><div>$<span class="stat-number" data-target="17000">0</span></div><span>Presupuesto Estimado</span></div>
+                </div>
+                <p class="results-summary">La solución se basa en una robusta Arquitectura N-Capas, asegurando escalabilidad y seguridad a largo plazo.</p>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="layouts/fragmentos :: footer"></footer>
+    <script th:src="@{/js/animations.js}"></script>
+</body>
+</html>

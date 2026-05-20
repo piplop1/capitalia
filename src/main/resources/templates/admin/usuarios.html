@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios - Admin Capitalia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+            <link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body>
+    <main>
+        <nav  id="nav-links" class="main-nav" th:replace="layouts/fragmentos:: navbarAdministrador"></nav>
+      <section id="gestion-usuarios" class="content-section">
+            <div class="intro-header">
+                <h1><i class="fas fa-users"></i> Gestión de Usuarios</h1>
+                
+            </div>
+
+            <div class="config-container">
+                <!-- Contenedor para mensajes de éxito/error -->
+                <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+                <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+                <!-- Tabla para mostrar la lista de usuarios -->
+                <div class="card registroDeUsuarios">
+                    <h3><i class="fas fa-list-ul"></i> Usuarios Registrados</h3>
+                    <div class="table-responsive">
+                        <table class="admin-table" id="user-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Rol</th>
+                                    <th>Correo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                
+                            </thead>
+                            <!-- El cuerpo de la tabla se llena con datos del modelo usando Thymeleaf -->
+                            <tbody id="user-table-body" th:if="${!usuarios.isEmpty()}">
+                                <tr th:each="usuario : ${usuarios}">
+                                    <td th:text="${usuario.fullname}"></td>
+                                    <td th:text="${usuario.role}"></td>
+                                    <td th:text="${usuario.email}"></td>
+                                    <td class="actions">
+                                        <!-- Botón Editar con atributos de datos para el modal -->
+                                        <button class="action-btn edit-icon" title="Editar"
+                                                th:attr="data-id=${usuario.id}, data-fullname=${usuario.fullname}, data-email=${usuario.email}, data-role=${usuario.role}"
+                                                data-modal-target="#edit-user-modal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <!-- Botón Eliminar que abre el modal de confirmación -->
+                                        <button class="action-btn delete-icon" title="Eliminar" th:attr="data-id=${usuario.id}" data-modal-target="#delete-confirm-modal"><i class="fas fa-trash-alt"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+                    
+    </main>
+
+    <!-- Modal para Editar Usuario -->
+    <div class="modal-overlay" id="edit-user-modal">
+        <div class="modal">
+            <button class="modal-close-btn">&times;</button>
+            <div class="modal-content">
+                <h3>Editar Usuario</h3>
+                <form id="edit-user-form" th:action="@{/usuarios/editar}" method="post" class="modal-form">
+                    <input type="hidden" id="edit-id" name="id">
+                    <div class="form-group">
+                        <label for="edit-fullname">Nombre Completo</label>
+                        <input type="text" id="edit-fullname" name="fullname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-email">Correo Electrónico</label>
+                        <input type="email" id="edit-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-role">Rol</label>
+                        <select id="edit-role" name="role" required>
+                            <option value="usuario">Usuario</option>
+                            <option value="administrador">Administrador</option>
+                        </select>
+                    </div>
+                    <div class="form-button-container">
+                        <button type="button" class="btn-icon modal-close-btn" title="Cancelar"><i class="fas fa-times"></i></button>
+                        <button type="submit" class="btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación para Eliminar -->
+    <div class="modal-overlay" id="delete-confirm-modal">
+        <div class="modal">
+            <button class="modal-close-btn">&times;</button>
+            <div class="modal-content">
+                <h3>Confirmar Eliminación</h3>
+                <p>¿Estás seguro de que quieres eliminar a este usuario? Esta acción no se puede deshacer.</p>
+                <form id="delete-user-form" method="post">
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-icon modal-close-btn" title="Cancelar"><i class="fas fa-times"></i></button>
+                        <button type="submit" class="btn-primary">Eliminar Usuario</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="layouts/fragmentos :: footer"></footer>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

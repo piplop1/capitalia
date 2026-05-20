@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría - Admin Capitalia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/index.css}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <nav class="main-nav" th:replace="layouts/fragmentos:: navbarAdministrador"></nav>
+        
+        <section class="content-section">
+            <div class="intro-header">
+                <h1><i class="fas fa-shield-alt"></i> Registro de Auditoría</h1>
+                <p class="subtitle">Historial de acciones críticas realizadas en el sistema.</p>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha y Hora</th>
+                                <th>Responsable</th>
+                                <th>Acción</th>
+                                <th>Detalle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="log : ${auditorias}">
+                                <td th:text="${log.idAuditoria}" style="color: #aaa;"></td>
+                                <td th:text="${#temporals.format(log.fecha, 'dd/MM/yyyy HH:mm:ss')}"></td>
+                                
+                                <td th:text="${log.usuarioResponsable}" style="font-weight: bold; color: #00d4ff;"></td>
+                                
+                                <td>
+                                    <span style="background: #333; padding: 4px 8px; border-radius: 4px; border: 1px solid #555; font-size: 0.85rem;" 
+                                          th:text="${log.accion}">
+                                    </span>
+                                </td>
+                                
+                                <td th:text="${log.detalle}" style="color: #ccc;"></td>
+                            </tr>
+                            
+                            <tr th:if="${#lists.isEmpty(auditorias)}">
+                                <td colspan="5" style="text-align: center; padding: 20px;">No hay registros de auditoría aún.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="layouts/fragmentos :: footer"></footer>
+</body>
+</html>

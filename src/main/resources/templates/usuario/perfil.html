@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Capitalia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <nav id="nav-links" class="main-nav" th:replace="layouts/fragmentos:: navbarUsuarios"></nav>
+        
+        <section id="inicio" class="content-section">
+            <div class="profile-header">
+                <h1><i class="fas fa-user-circle"></i> Mi Perfil</h1>
+                <p>Gestiona tu información personal y datos de contacto.</p>
+            </div>
+
+            <div class="profile-container" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                
+                <div class="left-column" style="flex: 1; min-width: 300px;">
+                    
+                    <div class="profile-picture-card">
+                        <img th:src="@{/img/logo.jpg}" alt="Foto de Perfil" id="profile-img" 
+                             style="width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 4px solid #00FFFF; margin-bottom: 1.5rem;">
+                        
+                        <label for="upload-photo" class="btn-secondary" style="display: block; width: 100%; text-align: center; cursor: pointer;">
+                            Cambiar Foto
+                        </label>
+                        <input type="file" id="upload-photo" accept="image/*" style="display: none;">
+                        
+                        <p class="upload-hint" style="font-size: 0.85rem; color: #c5c6c7; margin-top: 1rem;">
+                            Sube una imagen cuadrada. JPG, PNG.
+                        </p>
+                    </div>
+
+                    <div class="card" style="margin-top: 20px;">
+                        <h3><i class="fas fa-id-badge"></i> Detalles de Cuenta</h3>
+                        <ul style="list-style: none; padding: 0; margin-top: 15px;">
+                            <li style="margin-bottom: 10px;">
+                                <strong>Rol:</strong> 
+                                <span class="badge" style="background: #00d4ff; color: #000; padding: 2px 8px; border-radius: 4px;" 
+                                      th:text="${session.usuarioLogueado.role}">Cliente</span>
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Miembro desde:</strong>
+                                <span th:text="${#temporals.format(session.usuarioLogueado.fechaCreacion, 'dd/MM/yyyy')}">01/01/2025</span>
+                            </li>
+                            <li>
+                                <strong>Estado:</strong>
+                                <span style="color: #00ff88;">Activo <i class="fas fa-check-circle"></i></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="profile-info-card" style="flex: 2; min-width: 300px;">
+                    <h3><i class="fas fa-address-card"></i> Información Personal</h3>
+                    
+                    <form th:action="@{/miPerfilUsuarios/actualizar}" method="post" class="registration-form">
+                        
+                        <div class="form-group">
+                            <label for="fullname">Nombre Completo</label>
+                            <div class="input-with-icon">
+                                <input type="text" id="fullname" name="fullname" th:value="${session.usuarioLogueado.fullname}" required>
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico (Solo lectura)</label>
+                            <div class="input-with-icon">
+                                <input type="email" id="email" name="email" th:value="${session.usuarioLogueado.email}" disabled style="opacity: 0.7; cursor: not-allowed;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-row" style="display: flex; gap: 15px;">
+                            <div class="form-group" style="flex: 1;">
+                                <label for="dni">DNI / Documento</label>
+                                <div class="input-with-icon">
+                                    <input type="text" id="dni" name="dni" th:value="${persona?.dni}" placeholder="Ingrese DNI"> 
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label for="telefono">Teléfono</label>
+                                <div class="input-with-icon">
+                                    <input type="text" id="telefono" name="telefono" th:value="${persona?.telefono}" placeholder="Ej: 999888777">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="direccion">Dirección de Domicilio</label>
+                            <div class="input-with-icon">
+                                <input type="text" id="direccion" name="direccion" th:value="${persona?.direccion}" placeholder="Av. Principal 123">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nacimiento">Fecha de Nacimiento</label>
+                            <input type="date" id="nacimiento" name="fechaNacimiento" th:value="${persona?.fechaNacimiento}">
+                        </div>
+
+                        <button type="submit" class="btn-primary" style="margin-top: 15px; width: 100%;">Guardar Cambios</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="success-modal" class="modal-overlay" th:if="${successMessage}" style="display: flex;">
+        <div class="modal-content">
+            <div class="success-icon"><i class="fas fa-check-circle" style="color: #00ff88; font-size: 4rem;"></i></div>
+            <h3 style="color: #f0f0f0;">¡Éxito!</h3>
+            <p th:text="${successMessage}" style="color: #c5c6c7;"></p>
+            <button id="success-ok-btn" class="btn-primary" onclick="window.location.href='/miPerfilUsuarios'">Entendido</button>
+        </div>
+    </div>
+    
+    <footer th:replace="layouts/fragmentos :: footer"></footer>
+    <script th:src="@{/js/main.js}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const photoInput = document.getElementById('upload-photo');
+            const profileImg = document.getElementById('profile-img');
+
+            if (photoInput) {
+                photoInput.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            // Cambia la fuente de la imagen en pantalla
+                            profileImg.src = e.target.result;
+                        }
+                        
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

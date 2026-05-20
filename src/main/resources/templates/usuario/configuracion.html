@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuraciones - Capitalia</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/index.css}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <nav id="nav-links" class="main-nav" th:replace="layouts/fragmentos:: navbarUsuarios"></nav>
+        
+        <section class="main-configuraciones">
+            <div class="config-container">
+                <div class="config-header">
+                    <h1><i class="fas fa-cog"></i> Configuraciones</h1>
+                    <p class="subtitle">Administra las preferencias de tu cuenta, notificaciones y seguridad.</p>
+                </div>
+
+                <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+                <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+                <div class="card">
+                    <h2><i class="fas fa-credit-card"></i> Mis Tarjetas</h2>
+                    <p>Agrega o gestiona tus tarjetas de débito o crédito.</p>
+                    <button class="btn-config" data-modal-target="#modal-tarjetas">Gestionar Tarjetas</button>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-mobile-alt"></i> Número de Celular</h2>
+                    <p>Agrega o actualiza tu número de celular asociado a la cuenta.</p>
+                    <button class="btn-config" data-modal-target="#modal-celular">Gestionar Número</button>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-exchange-alt"></i> Límites de Operaciones</h2>
+                    <p>Modifica los montos máximos para tus transferencias.</p>
+                    <button class="btn-config" data-modal-target="#modal-limites">Modificar Límites</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="modal-tarjetas">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h3><i class="fas fa-credit-card"></i> Agregar Nueva Tarjeta</h3>
+            <form class="modal-form" th:action="@{/config/agregarTarjeta}" method="post">
+                <div class="form-group">
+                    <label>Número de la Tarjeta</label>
+                    <input type="text" name="numeroTarjeta" placeholder="**** **** **** ****" required>
+                </div>
+                <div class="form-group">
+                    <label>Fecha de Vencimiento (MM/AA)</label>
+                    <input type="text" name="fechaVencimiento" placeholder="MM/AA" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Guardar Tarjeta</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-celular">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h3><i class="fas fa-mobile-alt"></i> Actualizar Celular</h3>
+            <form class="modal-form" th:action="@{/config/actualizarCelular}" method="post">
+                <div class="form-group">
+                    <label>Número de Celular</label>
+                    <input type="text" name="celular" placeholder="987654321" pattern="\d{9}" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Guardar Número</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-limites">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h3><i class="fas fa-exchange-alt"></i> Modificar Límites</h3>
+            <form class="modal-form" th:action="@{/config/actualizarLimites}" method="post">
+                <div class="form-group">
+                    <label>Límite Diario Transferencias</label>
+                    <input type="number" name="limiteDiario" value="3000" class="form-control">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <footer th:replace="layouts/fragmentos :: footer"></footer>
+    <script th:src="@{/js/main.js}"></script>
+    
+    <script>
+        document.querySelectorAll('[data-modal-target]').forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = document.querySelector(button.dataset.modalTarget);
+                modal.classList.add('active'); // Asegúrate que en tu CSS .active tenga display: flex/block
+                modal.style.display = 'flex';
+            });
+        });
+
+        document.querySelectorAll('.modal-close-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = button.closest('.modal-overlay');
+                modal.style.display = 'none';
+                modal.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Beneficios - Capitalia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <nav id="nav-links" class="main-nav" th:replace="layouts/fragmentos:: navbarUsuarios"></nav>
+
+        <section class="benefits-section">
+            <div class="profile-header">
+                <h1><i class="fas fa-gift"></i> Mis Beneficios</h1>
+                <p>Tu saldo actual es: <strong data-monto style="color: #00d4ff;" th:text="'S/ ' + ${saldo}">S/ 0.00</strong></p>
+            </div>
+
+            <div class="benefits-info-grid">
+
+                <div class="benefit-info-card" th:classappend="${saldo < 1200} ? 'current-benefit' : ''">
+                    <h3><i class="fas fa-shield-alt"></i> Nivel Básico</h3>
+
+                    <div th:if="${saldo < 1200}">
+                        <div class="current-benefit-label">Nivel Actual</div>
+                        <p class="benefit-requirement">Tus beneficios activos:</p>
+                        <ul>
+                            <li th:each="ben : ${misBeneficios}">
+                                <i class="fas fa-check-circle"></i> <span th:text="${ben.nombre}"></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div th:unless="${saldo < 1200}">
+                        <p class="benefit-requirement">Requisito: Ser miembro de Capitalia</p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Acceso a la plataforma.</li>
+                            <li><i class="fas fa-check-circle"></i> Soporte estándar.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="benefit-info-card" th:classappend="${saldo >= 1200 and saldo < 2100} ? 'current-benefit' : ''">
+                    <h3><i class="fas fa-medal"></i> Nivel Oro</h3>
+
+                    <div th:if="${saldo >= 1200 and saldo < 2100}">
+                        <div class="current-benefit-label">Nivel Actual</div>
+                        <p class="benefit-requirement">Tus beneficios activos:</p>
+                        <ul>
+                            <li th:each="ben : ${misBeneficios}">
+                                <i class="fas fa-check-circle" style="color: gold;"></i> <span th:text="${ben.nombre}"></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div th:unless="${saldo >= 1200 and saldo < 2100}">
+                        <p class="benefit-requirement">Requisito: Ahorro > S/ 1,200</p>
+                        <div th:if="${saldo >= 1200}" style="margin-bottom: 15px;">
+                            <span style="color: #00ff88; font-size: 0.9rem;"><i class="fas fa-lock-open"></i> Desbloqueado (Superado)</span>
+                        </div>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Cero Comisión.</li>
+                            <li><i class="fas fa-check-circle"></i> Tasa Preferencial 1.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="benefit-info-card" th:classappend="${saldo >= 2100 and saldo < 3500} ? 'current-benefit' : ''">
+                    <h3><i class="fas fa-star"></i> Nivel Platino</h3>
+
+                    <div th:if="${saldo >= 2100 and saldo < 3500}">
+                        <div class="current-benefit-label">Nivel Actual</div>
+                        <p class="benefit-requirement">Tus beneficios activos:</p>
+                        <ul>
+                            <li th:each="ben : ${misBeneficios}">
+                                <i class="fas fa-star" style="color: #00d4ff;"></i> <span th:text="${ben.nombre}"></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div th:unless="${saldo >= 2100 and saldo < 3500}">
+                        <p class="benefit-requirement">Requisito: Ahorro > S/ 2,100</p>
+                        <ul>
+                            <li><i class="fas fa-star"></i> Beneficios Oro incluidos.</li>
+                            <li><i class="fas fa-check-circle"></i> Tasa Preferencial 2.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="benefit-info-card" th:classappend="${saldo >= 3500} ? 'current-benefit' : ''">
+                    <h3><i class="fas fa-gem"></i> Nivel Diamante</h3>
+
+                    <div th:if="${saldo >= 3500}">
+                        <div class="current-benefit-label">Nivel Actual</div>
+                        <p class="benefit-requirement">Tus beneficios activos:</p>
+                        <ul>
+                            <li th:each="ben : ${misBeneficios}">
+                                <i class="fas fa-gem" style="color: #e056fd;"></i> <span th:text="${ben.nombre}"></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div th:unless="${saldo >= 3500}">
+                        <p class="benefit-requirement">Requisito: Ahorro > S/ 3,500</p>
+                        <ul>
+                            <li><i class="fas fa-gem"></i> Todo incluido.</li>
+                            <li><i class="fas fa-check-circle"></i> Tasa VIP.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+    <footer th:replace="layouts/fragmentos :: footer"></footer>
+    <script th:replace="layouts/fragmentos :: formatearMontos"></script>
+</body>
+</html>

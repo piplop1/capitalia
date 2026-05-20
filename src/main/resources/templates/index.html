@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capitalia</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/index.css}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+     <nav class="main-nav" th:replace="layouts/fragmentos:: navbarPrincipal "></nav>
+<section id="inicio" class="content-section">
+    <div class="intro-header">
+        <h1>Capitalia: La Nueva Era del Ahorro Digital</h1>
+        <p class="subtitle"><i class="fas fa-hand-sparkles"></i> ¡Bienvenido a la plataforma que redefine tu futuro financiero!</p>
+    </div>
+
+    <p>En Capitalia, hemos diseñado un sistema web de vanguardia para poner fin a los procesos lentos y manuales de la banca tradicional. Nuestra misión es transformar tu experiencia, ofreciéndote soluciones que combinan seguridad y accesibilidad.</p>
+    
+    <hr class="separator">
+
+    <h3>Tu dinero, más inteligente y a tu alcance:</h3>
+
+    <div class="feature-grid">
+        
+        <div class="feature-card">
+            <span class="icon"><i class="fas fa-cogs"></i></span>
+            <h4>Automatización y Eficiencia</h4>
+            <p>Dejamos atrás las consultas en ventanilla y los registros en papel. Nuestro sistema automatiza completamente la gestión de tus ahorros, garantizando rapidez y precisión en cada movimiento.</p>
+        </div>
+
+        <div class="feature-card">
+            <span class="icon"><i class="fas fa-chart-line"></i></span>
+            <h4>Análisis Estratégico en Tiempo Real</h4>
+            <p>No solo ves tu saldo; obtienes una visión clara de tu comportamiento financiero. Nuestro módulo de análisis genera reportes que te ayudan a tomar decisiones estratégicas.</p>
+        </div>
+
+        <div class="feature-card">
+            <span class="icon"><i class="fas fa-gift"></i></span>
+            <h4>Recompensas Personalizadas</h4>
+            <p>Accede a promociones y beneficios automáticamente según tu nivel de ahorro. La plataforma te recompensa por tu disciplina financiera, permitiéndote aprovechar al máximo las oportunidades.</p>
+        </div>
+
+    </div>
+
+    <div class="call-to-action">
+        <p>Con Capitalia, tienes el control de tus finanzas en una plataforma digital moderna y transparente.</p>
+        <button class="btn-primary" onclick="window.location.href='/registro'">Registra tu Cuenta y Comienza a Ahorrar de Forma Inteligente</button>
+    </div>
+</section>
+</main>
+<footer th:replace="layouts/fragmentos :: footer"></footer>
+   <script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/animations.js}"></script>
+
+</body>
+</html>

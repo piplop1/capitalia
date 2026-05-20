@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/index.css}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Servicios - Capitalia</title>
+</head>
+<body>
+    <main>
+    <nav class="main-nav" th:replace="layouts/fragmentos:: navbarPrincipal "></nav>
+    <section id="servicios-beneficios" class="content-section carousel-section">
+            <h2>Niveles de Beneficios y Recompensas <i class="fas fa-sparkles"></i></h2>
+            <p class="section-subtitle">Descubre un mundo de ventajas exclusivas diseñadas para premiar tu disciplina de ahorro. A más ahorro, mejores beneficios.</p>
+            <br>
+            <br>
+            
+            <div class="carousel-container">
+                <div class="card-carousel">
+                    <!-- Tarjeta Oro -->
+                    <div class="service-card oro">
+                        <img th:src="@{/img/targetaOro.png}" alt="Tarjeta Oro" class="card-image">
+                        <h3>Beneficios Tarjeta Oro</h3>
+                        <p class="requirement">Requisito: Ahorro superior a S/ 1,200</p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Cero Comisión de Mantenimiento.</li>
+                            <li><i class="fas fa-check-circle"></i> Tasa de Interés Preferencial (Nivel 1).</li>
+                            <li><i class="fas fa-check-circle"></i> Acceso a Sorteos Mensuales.</li>
+                            <li><i class="fas fa-check-circle"></i> 25% de descuento en comisión de tu primer préstamo.</li>
+                        </ul>
+                    </div>
+                    <!-- Tarjeta Platino -->
+                    <div class="service-card platino">
+                        <img th:src="@{/img/targetaPlatino.png}" alt="Tarjeta Platino" class="card-image">
+                        <h3>Beneficios Tarjeta Platino</h3>
+                        <p class="requirement">Requisito: Ahorro superior a S/ 2,100</p>
+                        <ul>
+                            <li><i class="fas fa-star"></i> Todos los beneficios de Oro, MÁS:</li>
+                            <li><i class="fas fa-check-circle"></i> Tasa de Interés Preferencial (Nivel 2).</li>
+                            <li><i class="fas fa-check-circle"></i> 5 Transferencias Interbancarias gratuitas al mes.</li>
+                            <li><i class="fas fa-check-circle"></i> Tasa reducida en Préstamos Personales.</li>
+                            <li><i class="fas fa-check-circle"></i> Acceso a sistema de recompensas "Platino".</li>
+                        </ul>
+                    </div>
+                    <!-- Tarjeta Diamante -->
+                    <div class="service-card diamante">
+                        <img th:src="@{/img/targetaDiamante.png}" alt="Tarjeta Diamante" class="card-image">
+                        <h3>Beneficios Tarjeta Diamante</h3>
+                        <p class="requirement">Requisito: Ahorro superior a S/ 3,500</p>
+                        <ul>
+                            <li><i class="fas fa-gem"></i> Todos los beneficios de Platino, MÁS:</li>
+                            <li><i class="fas fa-check-circle"></i> Tasa de Interés VIP (Nivel 3).</li>
+                            <li><i class="fas fa-check-circle"></i> Línea de Préstamo Pre-Aprobada.</li>
+                            <li><i class="fas fa-check-circle"></i> Asesoría Financiera Digital prioritaria.</li>
+                            <li><i class="fas fa-check-circle"></i> 1% de Cashback en compras seleccionadas.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+</main>
+    <footer th:replace="layouts/fragmentos :: footer"></footer>
+       <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/animations.js}"></script>
+</body>
+</html>

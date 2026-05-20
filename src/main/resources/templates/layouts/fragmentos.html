@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragmentos - Capitalia</title>
+    
+    
+</head>
+<body>
+    
+    <!---navbar principal-->
+    <nav  id="nav-links" class="main-nav" th:fragment="navbarPrincipal">
+         <button class="hamburger-button" id="hamburger-button">&#9776;</button>
+    <a class="nav-brand" th:href="@{/}"><img th:src="@{/img/logo.jpg}" alt="Capitalia Logo" class="nav-logo">
+        <span>Capitalia</span>
+    </a>
+        <ul class="nav-links " id="nav-links">
+            <li><a th:href="@{/}">Inicio General</a></li>
+            <li> <a th:href="@{/nosotros}">Nosotros</a></li>
+            <li><a th:href="@{/servicios}">Servicios</a></li>
+            <li><a th:href="@{/registro}">Registro<i class="fas fa-user-plus"></i></a>
+            <li><a th:href="@{/login}">Login<i class="fas fa-sign-in-alt"></i></a>
+        </ul>
+    </nav>
+    <!--fin de navbar Usuarios-->
+   <nav id="nav-links" class="main-nav" th:fragment="navbarUsuarios">
+    <button class="hamburger-button" id="hamburger-button">&#9776;</button>
+
+    <a class="nav-brand" th:href="@{/dashboardUsuarios}">
+        <img th:src="@{/img/logo.jpg}" alt="Capitalia Logo" class="nav-logo">
+        <span>Capitalia</span>
+    </a>
+
+    <ul class="nav-links" id="nav-links">
+        <img th:src="@{/img/logo.jpg}" alt="Avatar" id="navbar-profile-img" class="navbar-user-avatar">
+        <li><a th:href="@{/dashboardUsuarios}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a th:href="@{/serviciosUsuarios}"><i class="fas fa-sparkles"></i>Mis Servicios</a></li>
+        <li><a th:href="@{/miPerfilUsuarios}">Mi Perfil</a></li>
+        <li><a th:href="@{/misBeneficiosUsuarios}"><i class="fas fa-gift"></i> Mis Beneficios</a></li>
+        <li><a th:href="@{/configuracionesUsuarios}"><i class="fas fa-cog"></i>Configuraciones</a></li>
+        <li><a th:href="@{/login}" id="logout-link"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+    </ul>
+</nav>
+     <!---navbar administrador-->
+<nav th:fragment="navbarAdministrador" class="main-nav">
+    <a href="#" class="nav-brand">
+        <img th:src="@{/img/logo.jpg}" alt="Logo" class="nav-logo">
+        Capitalia <span style="font-size: 0.8rem; margin-left: 10px; opacity: 0.8;" th:text="'(' + ${session.usuarioLogueado.role} + ')'"></span>
+    </a>
+    
+    <button class="hamburger-button" id="hamburger-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links" id="nav-links">
+        <li th:if="${session.usuarioLogueado.role == 'maestro'}">
+            <a th:href="@{/dashboardAdmin}"><i class="fas fa-users-cog"></i> Dashboard</a>
+        </li>
+        <li th:if="${session.usuarioLogueado.role == 'maestro'}">
+            <a th:href="@{/gesUsuarios}"><i class="fas fa-users"></i> Usuarios</a>
+        </li>
+        <li>
+            <a th:href="@{/reportesAdmin}"><i class="fas fa-chart-pie"></i> Reportes</a>
+        </li>
+        <li>
+            <a th:href="@{/solicitudesAdmin}"><i class="fas fa-file-invoice-dollar"></i> Solicitudes</a>
+        </li>
+        <li>
+            <a th:href="@{/configuracionAdmin}"><i class="fas fa-cogs"></i> Config</a>
+        </li>
+        <li th:if="${session.usuarioLogueado.role == 'maestro'}">
+            <a th:href="@{/admin/auditoria}"><i class="fas fa-shield-alt"></i> Auditoría</a>
+        </li>
+        <li>
+            <a th:href="@{/login}"><i class="fas fa-sign-out-alt"></i> Salir</a>
+        </li>
+    </ul>
+</nav>
+     <!--fin de navbar Administrador-->
+      
+    <!--footer-->
+    <footer th:fragment="footer">
+        <div class="footer-container">
+
+            <div class="footer-section about">
+                <h3>Capitalia</h3>
+                <p>Soluciones financieras modernas, seguras y accesibles. Impulsando el progreso económico a través de la digitalización del ahorro.</p>
+            </div>
+
+            <div class="footer-section links">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section support">
+                <h3>Soporte</h3>
+                <ul>
+                    <li><a href="manual-usuario.pdf" target="_blank">Manual de Usuario </a></li>
+                    <li><a href="#faqs">Preguntas Frecuentes (FAQ)</a></li>
+                    <li><a href="#terminos">Términos y Condiciones</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Capitalia. Todos los derechos reservados.</p>
+            <p>Sistema desarrollado bajo la <strong>Metodología Scrum</strong> por: Correa, Cueva, Periche, Torres.</p>
+        </div>
+    </footer>
+    <script th:fragment="formatearMontos">
+        document.addEventListener('DOMContentLoaded', () => {
+            const formatter = new Intl.NumberFormat('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            document.querySelectorAll('[data-monto]').forEach(el => {
+                const texto = el.textContent.trim();
+                const num = parseFloat(texto.replace('S/', '').replace(/,/g, '').trim());
+                if (!isNaN(num)) {
+                    el.textContent = 'S/' + formatter.format(num);
+                }
+                el.style.visibility = 'visible';
+            });
+        });
+    </script>
+</body>
+</html>

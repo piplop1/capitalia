@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "resend.api.key",
+  "type": "java.lang.String",
+  "description": "A description for 'resend.api.key'"
+}]}
